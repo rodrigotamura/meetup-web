@@ -1,14 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import { Container, Title, Meetups } from './styles';
 
-export default function Meetup() {
+export default function Meetup({ history }) {
   return (
     <Container>
       <Title>
         <h1>My Meetups</h1>
-        <button type="button">New meetup</button>
+        <button
+          type="button"
+          onClick={() => {
+            history.push('/meetups/new');
+          }}
+        >
+          New meetup
+        </button>
       </Title>
 
       <Meetups>
@@ -43,3 +51,9 @@ export default function Meetup() {
     </Container>
   );
 }
+
+Meetup.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};

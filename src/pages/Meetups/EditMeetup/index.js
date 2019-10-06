@@ -4,7 +4,7 @@ import { MdSave, MdImage } from 'react-icons/md';
 
 import { Container, ImageInput } from './styles';
 
-export default function FormMeetup() {
+export default function EditMeetup() {
   return (
     <Container>
       <ImageInput>

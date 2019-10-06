@@ -16,7 +16,12 @@ export default function Signin() {
   return (
     <>
       <Form onSubmit={handleSubmit}>
-        <Input name="email" type="email" placeholder="Your e-mail address" />
+        <Input
+          name="email"
+          type="email"
+          placeholder="Your e-mail address"
+          autoFocus
+        />
         <Input name="password" type="password" placeholder="Your password" />
         <button type="submit">{loading ? 'Loading...' : 'Sign in'}</button>
         <Link to="/register">Create free account</Link>
