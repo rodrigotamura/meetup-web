@@ -19,9 +19,10 @@ export default function Details({ match, history }) {
       setLoading(true);
       try {
         const response = await api.get(`meetups/${id}`);
-        response.data.formatedDate = formatDate(new Date(response.data.date));
+        const formatedDate = formatDate(new Date(response.data.date));
+        const { url } = response.data.File;
 
-        setMeetup(response.data);
+        setMeetup({ ...response.data, formatedDate, url });
       } catch (err) {
         toast.error(
           `Something is wrong in loading meetup. Server response: ${err}`
@@ -61,7 +62,7 @@ export default function Details({ match, history }) {
             </div>
           </Title>
           <Meetup>
-            <img src={meetup.image} alt={meetup.title} />
+            <img src={meetup.url} alt={meetup.title} />
             <div className="about">{meetup.description}</div>
             <div className="extra">
               <span>{meetup.formatedDate}</span>

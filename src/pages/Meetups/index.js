@@ -45,7 +45,7 @@ export default function Meetup({ history }) {
 
       <Meetups>
         {loading && <Loading />}
-        {meetups ? (
+        {meetups.length > 0 ? (
           meetups.map(meetup => (
             <Link key={meetup.id} to={`/meetups/${meetup.id}`}>
               <div>
@@ -55,7 +55,7 @@ export default function Meetup({ history }) {
             </Link>
           ))
         ) : (
-          <p>There is no meetup yet!</p>
+          <p>You do not have any meetup yet!</p>
         )}
       </Meetups>
     </Container>

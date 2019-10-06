@@ -26,6 +26,10 @@ export const Title = styled.div`
 export const Meetups = styled.div`
   margin-top: 48px;
 
+  p {
+    color: #fff;
+  }
+
   div {
     display: flex;
     justify-content: space-between;
