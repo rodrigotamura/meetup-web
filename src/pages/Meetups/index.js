@@ -14,25 +14,19 @@ export default function Meetup({ history }) {
   const [date] = useState(new Date());
 
   useEffect(() => {
-    async function loadMeetups() {
+    (async function loadMeetups() {
       setLoading(true);
       try {
         const response = await api.get('meetups', {
           params: { date },
         });
 
-        const meets = response.data.map(meet => ({
-          ...meet,
-          // dateFormatted: formatDate(meet.date),
-        }));
-
-        setMeetups(meets);
+        setMeetups(response.data);
       } catch (err) {
         toast.error(`Something is wrong in loading meetups.`);
       }
       setLoading(false);
-    }
-    loadMeetups();
+    })();
   }, [date]);
 
   return (

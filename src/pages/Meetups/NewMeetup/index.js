@@ -12,7 +12,7 @@ import api from '~/services/api';
 
 // validation
 const schema = Yup.object().shape({
-  banner_id: Yup.string().required('Image is required'),
+  image: Yup.string().required('Image is required'),
   title: Yup.string().required('Name is required'),
   description: Yup.string()
     .min(10, 'You must type 10 chars at least')
@@ -27,7 +27,7 @@ export default function NewMeetup({ history }) {
     description,
     localization,
     date,
-    banner_id,
+    image,
   }) {
     try {
       await api.post('meetups', {
@@ -35,7 +35,7 @@ export default function NewMeetup({ history }) {
         description,
         localization,
         date,
-        image: banner_id,
+        image,
       });
 
       toast.success('Meetup has created successfuly 👍');
@@ -50,10 +50,10 @@ export default function NewMeetup({ history }) {
   return (
     <Container>
       <Form onSubmit={handleSubmit} schema={schema}>
-        <ImageInput name="banner_id" />
-        <Input name="title" type="text" placeholder="Title" />
-        <Textarea name="description" placeholder="Description" />
-        <Datapicker name="date" placeholder="Date/time" />
+        <ImageInput name="image" />
+        <Input name="title" type="text" placeholder="Title of Meetup" />
+        <Textarea name="description" placeholder="Description of Meetup" />
+        <Datapicker name="date" placeholder="Date/time of Meetup" />
         <Input name="localization" type="text" placeholder="Where?" />
         <button type="submit">
           <MdSave size={16} color="#FFF" /> Save meetup

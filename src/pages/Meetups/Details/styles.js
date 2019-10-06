@@ -43,6 +43,8 @@ export const Meetup = styled.div`
     display: flex;
     height: auto;
     margin-bottom: 48px;
+    width: 100%;
+    border-radius: 4px;
   }
 
   div.about {

@@ -1,52 +1,86 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdEdit, MdArrowBack } from 'react-icons/md';
-import history from '~/services/history';
+import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 
 import { Container, Title, Meetup } from './styles';
 
-import Imagem from '~/assets/Bitmap.jpg';
+import api from '~/services/api';
+import Loading from '~/components/Loading';
+import { formatDate } from '~/utils/format';
 
-export default function Details() {
+export default function Details({ match, history }) {
+  const [loading, setLoading] = useState(false);
+  const [meetup, setMeetup] = useState({});
+  const { id } = match.params;
+
+  useEffect(() => {
+    (async function loadMeetup() {
+      setLoading(true);
+      try {
+        const response = await api.get(`meetups/${id}`);
+        response.data.formatedDate = formatDate(new Date(response.data.date));
+
+        setMeetup(response.data);
+      } catch (err) {
+        toast.error(
+          `Something is wrong in loading meetup. Server response: ${err}`
+        );
+      }
+      setLoading(false);
+    })();
+  }, [id]);
+
   return (
     <Container>
-      <Title>
-        <h1>React Native Meetup</h1>
-        <div>
-          <button
-            type="button"
-            className="edit"
-            onClick={() => {
-              history.push('/meetups/edit/1');
-            }}
-          >
-            <MdEdit color="#FFF" size={18} />
-            Edit
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              history.push('/meetups');
-            }}
-          >
-            <MdArrowBack color="#FFF" size={18} />
-            Back
-          </button>
-        </div>
-      </Title>
-      <Meetup>
-        <img src={Imagem} alt="React Native Meetup" />
-        <div className="about">
-          O Meetup de React Native é um evento que reúne a comunidade de
-          desenvolvimento mobile utilizando React a fim de compartilhar
-          conhecimento. Todos são convidados. Caso queira participar como
-          palestrante do meetup envie um e-mail para
-          organizacao@meetuprn.com.br.
-        </div>
-        <div className="extra">
-          <span>24th July, at 20h</span>
-          <span>Guilherme Gembala Street, 260</span>
-        </div>
-      </Meetup>
+      {loading && <Loading />}
+      {meetup && (
+        <>
+          <Title>
+            <h1>{meetup.title}</h1>
+            <div>
+              <button
+                type="button"
+                className="edit"
+                onClick={() => {
+                  history.push(`/meetups/edit/${id}`);
+                }}
+              >
+                <MdEdit color="#FFF" size={18} />
+                Edit
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  history.push('/meetups');
+                }}
+              >
+                <MdArrowBack color="#FFF" size={18} />
+                Back
+              </button>
+            </div>
+          </Title>
+          <Meetup>
+            <img src={meetup.image} alt={meetup.title} />
+            <div className="about">{meetup.description}</div>
+            <div className="extra">
+              <span>{meetup.formatedDate}</span>
+              <span>{meetup.localization}</span>
+            </div>
+          </Meetup>
+        </>
+      )}
     </Container>
   );
 }
+
+Details.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    }),
+  }).isRequired,
+};

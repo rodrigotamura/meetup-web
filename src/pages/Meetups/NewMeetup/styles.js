@@ -14,6 +14,17 @@ export const Container = styled.div`
       margin: -10px 0 10px 10px;
     }
 
+    .react-datepicker-wrapper + span {
+      color: red;
+      margin-top: -10px;
+      margin-bottom: 10px;
+      margin-left: 10px;
+    }
+
+    .react-datepicker-wrapper input {
+      width: 100%;
+    }
+
     button:not(.react-datepicker__navigation) {
       background: #f94d6a;
       color: #fff;

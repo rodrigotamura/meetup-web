@@ -16,8 +16,10 @@ export default function LabelFile({ name, fileData }) {
     const data = new FormData();
     data.append('file', e.target.files[0]);
     const response = await api.post('files', data);
-    const { id, url } = response.data;
-    setFile(id);
+    const { url, path } = response.data;
+    console.tron.log(response.data);
+
+    setFile(url);
     setPreview(url);
   }
 
