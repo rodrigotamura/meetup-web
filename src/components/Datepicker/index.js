@@ -5,11 +5,18 @@ import PropTypes from 'prop-types';
 import { useField } from '@rocketseat/unform';
 
 import 'react-datepicker/dist/react-datepicker.css';
+import { parseISO } from 'date-fns';
 
 export default function DatePicker({ name, placeholder }) {
   const ref = useRef(null);
   const { fieldName, registerField, defaultValue, error } = useField(name);
-  const [selected, setSelected] = useState(defaultValue);
+  const [selected, setSelected] = useState();
+
+  useEffect(() => {
+    if (defaultValue) {
+      setSelected(parseISO(defaultValue));
+    }
+  }, [defaultValue]);
 
   useEffect(() => {
     registerField({
@@ -21,14 +28,14 @@ export default function DatePicker({ name, placeholder }) {
       },
     });
   }, [ref.current, fieldName]); // eslint-disable-line
-
   return (
     <>
       <ReactDatePicker
-        name={name}
+        name={fieldName}
         selected={selected}
         onChange={date => setSelected(date)}
         showTimeSelect
+        withPortal
         dateFormat="MM/dd/yyyy h:mm aa"
         size={20}
         ref={ref}

@@ -8,7 +8,7 @@ export const Container = styled.div`
     width: 100%;
     margin: 20px 0;
 
-    button {
+    button:not(.react-datepicker__navigation) {
       background: #f94d6a;
       color: #fff;
       align-self: flex-end;
@@ -28,6 +28,17 @@ export const Container = styled.div`
       &:hover {
         color: ${darken(0.3, '#FFF')};
       }
+    }
+
+    .react-datepicker-wrapper + span {
+      color: red;
+      margin-top: -10px;
+      margin-bottom: 10px;
+      margin-left: 10px;
+    }
+
+    .react-datepicker-wrapper input {
+      width: 100%;
     }
   }
 `;

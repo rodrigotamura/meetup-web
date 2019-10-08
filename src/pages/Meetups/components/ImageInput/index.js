@@ -6,11 +6,19 @@ import { Container, Label } from './styles';
 
 export default function LabelFile({ name, fileData }) {
   const ref = useRef();
-
   // fieldName retorna banner_id
-  const { fieldName, registerField, error } = useField(name);
-  const [file, setFile] = useState(fileData && fileData.banner.id);
-  const [preview, setPreview] = useState(fileData && fileData.banner.url);
+  const { defaultValue, fieldName, registerField } = useField('banner');
+  const { error } = useField(name);
+
+  const [file, setFile] = useState();
+  const [preview, setPreview] = useState();
+
+  useEffect(() => {
+    if (defaultValue) {
+      setPreview(defaultValue.url);
+      setFile(defaultValue.id);
+    }
+  }, [defaultValue]);
 
   async function handleChangefile(e) {
     const data = new FormData();
@@ -24,23 +32,27 @@ export default function LabelFile({ name, fileData }) {
 
   useEffect(() => {
     registerField({
-      name: fieldName,
+      name,
       ref: ref.current,
       path: 'dataset.file',
+      clearValue: pickerRef => {
+        pickerRef.clear();
+      },
     });
-  }, [file, registerField, fieldName]);
+    // eslint-disable-next-line
+  }, [ref.current]);
 
   return (
     <Container>
       {error && <span>Please, insert an image</span>}
-      <Label htmlFor="file" background={preview}>
+      <Label htmlFor="banner" background={preview}>
         {!preview && <MdAddAPhoto size={50} />}
         <input
           name={fieldName}
           onChange={handleChangefile}
           type="file"
           accept="image/*"
-          id="file"
+          id="banner"
           data-file={file}
           ref={ref}
         />

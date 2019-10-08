@@ -11,7 +11,7 @@ import { formatDate } from '~/utils/format';
 
 export default function Details({ match, history }) {
   const [loading, setLoading] = useState(false);
-  const [meetup, setMeetup] = useState({});
+  const [meetup, setMeetup] = useState();
   const { id } = match.params;
 
   useEffect(() => {
@@ -19,10 +19,13 @@ export default function Details({ match, history }) {
       setLoading(true);
       try {
         const response = await api.get(`meetups/${id}`);
-        const formatedDate = formatDate(new Date(response.data.date));
-        const { url } = response.data.File;
 
-        setMeetup({ ...response.data, formatedDate, url });
+        const data = {
+          ...response.data.meetup,
+          formatedDate: formatDate(new Date(response.data.meetup.date)),
+        };
+
+        setMeetup(data);
       } catch (err) {
         toast.error(
           `Something is wrong in loading meetup. Server response: ${err}`
@@ -30,7 +33,7 @@ export default function Details({ match, history }) {
       }
       setLoading(false);
     })();
-  }, [id]);
+  }, [id, meetup]);
 
   return (
     <Container>
@@ -62,7 +65,7 @@ export default function Details({ match, history }) {
             </div>
           </Title>
           <Meetup>
-            <img src={meetup.url} alt={meetup.title} />
+            <img src={meetup.banner.url} alt={meetup.title} />
             <div className="about">{meetup.description}</div>
             <div className="extra">
               <span>{meetup.formatedDate}</span>

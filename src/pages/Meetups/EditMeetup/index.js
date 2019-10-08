@@ -7,10 +7,12 @@ import { toast } from 'react-toastify';
 import { Container } from './styles';
 import api from '~/services/api';
 import ImageInput from '~/pages/Meetups/components/ImageInput';
+import Loading from '~/components/Loading';
+import Datapicker from '~/components/Datepicker';
 
 export default function EditMeetup({ match, history }) {
   const [loading, setLoading] = useState(false);
-  const [meetup, setMeetup] = useState({});
+  const [meetup, setMeetup] = useState();
   const { id } = match.params;
 
   useEffect(() => {
@@ -18,13 +20,12 @@ export default function EditMeetup({ match, history }) {
       setLoading(true);
       try {
         const response = await api.get(`meetups/${id}`);
-        response.data.date = () => {
+        /* response.data.date = (() => {
           const dateObj = new Date(response.data.date);
-          const isPM = dateObj.getHours() >= 12;
-          return `${dateObj.getMonth()}/${dateObj.getDay()}/${dateObj.getFullYear()} ${dateObj.getHours()}:${dateObj.getMinutes()} ${isPM}`;
-        };
+          return `${dateObj.getMonth()}/${dateObj.getDay()}/${dateObj.getFullYear()} ${dateObj.getHours()}:${dateObj.getMinutes()}`;
+        })(); */
 
-        setMeetup(response.data);
+        setMeetup({ ...response.data.meetup });
       } catch (err) {
         toast.error(
           `Something is wrong in loading meetup. Server response: ${err}`
@@ -34,13 +35,18 @@ export default function EditMeetup({ match, history }) {
     })();
   }, [id]);
 
+  function handleSubmit(data) {
+    console.tron.log(data);
+  }
+
   return (
     <Container>
-      <Form>
-        <ImageInput name="image" />
+      {loading && <Loading />}
+      <Form onSubmit={handleSubmit} initialData={meetup}>
+        <ImageInput name="banner_id" />
         <Input name="title" type="text" placeholder="Title" />
-        <Textarea name="description" placeholder="Description" />
-        <Input name="date" type="datetime-local" placeholder="Date/time" />
+        <Input name="description" multiline placeholder="Description" />
+        <Datapicker name="date" placeholder="Date/time of Meetup" />
         <Input name="localization" type="text" placeholder="Where?" />
         <button type="submit">
           <MdSave size={16} color="#FFF" /> Save meetup
