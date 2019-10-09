@@ -44,7 +44,7 @@ export default function NewMeetup({ history }) {
       history.push('/');
     } catch (err) {
       toast.error(
-        `Something gone wrong. Server response: ${err.response.data.error}`
+        `Something has gone wrong. Server response: ${err.response.data.error}`
       );
     }
   }

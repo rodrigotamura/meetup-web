@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input } from '@rocketseat/unform';
 import { MdSave } from 'react-icons/md';
 
 import { Container } from './styles';
 
 export default function Profile() {
+  const [profile, setProfile] = useState({});
   return (
     <Container>
       <Form>

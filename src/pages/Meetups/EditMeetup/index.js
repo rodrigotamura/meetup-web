@@ -61,7 +61,13 @@ export default function EditMeetup({ match, history }) {
         date,
         localization,
       });
-    } catch (error) {}
+
+      toast.success(`Meetup updated successfully! 👍`);
+    } catch (error) {
+      toast.error(
+        `Something has gone wrong. Server response: ${error.response.data.error}`
+      );
+    }
     setSendLoading(false);
   }
 
@@ -88,7 +94,7 @@ EditMeetup.propTypes = {
   }).isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
     }),
   }).isRequired,
 };
