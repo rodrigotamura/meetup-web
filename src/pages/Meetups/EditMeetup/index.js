@@ -4,6 +4,7 @@ import { MdSave, MdImage } from 'react-icons/md';
 import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 import { Container } from './styles';
 import api from '~/services/api';
 import ImageInput from '~/pages/Meetups/components/ImageInput';
@@ -12,18 +13,27 @@ import Datapicker from '~/components/Datepicker';
 
 export default function EditMeetup({ match, history }) {
   const [loading, setLoading] = useState(false);
+  const [sendLoading, setSendLoading] = useState(false);
   const [meetup, setMeetup] = useState();
   const { id } = match.params;
+
+  const schema = Yup.object().shape({
+    banner_id: Yup.number().required('Please, inform the banner image'),
+    title: Yup.string().required('Please, inform a title'),
+    description: Yup.string()
+      .max(140, 'Description can not be more than 140 characters')
+      .required('Please, inform a description'),
+    localization: Yup.string().required('Please, inform a location'),
+    date: Yup.date()
+      .required('Please, inform a date')
+      .min(new Date(), 'Unable to create the meetup on past dates'),
+  });
 
   useEffect(() => {
     (async function loadMeetup() {
       setLoading(true);
       try {
         const response = await api.get(`meetups/${id}`);
-        /* response.data.date = (() => {
-          const dateObj = new Date(response.data.date);
-          return `${dateObj.getMonth()}/${dateObj.getDay()}/${dateObj.getFullYear()} ${dateObj.getHours()}:${dateObj.getMinutes()}`;
-        })(); */
 
         setMeetup({ ...response.data.meetup });
       } catch (err) {
@@ -35,17 +45,33 @@ export default function EditMeetup({ match, history }) {
     })();
   }, [id]);
 
-  function handleSubmit(data) {
-    console.tron.log(data);
+  async function handleSubmit({
+    banner_id,
+    title,
+    description,
+    date,
+    localization,
+  }) {
+    setSendLoading(true);
+    try {
+      await api.put(`meetups/${id}`, {
+        banner_id,
+        title,
+        description,
+        date,
+        localization,
+      });
+    } catch (error) {}
+    setSendLoading(false);
   }
 
   return (
     <Container>
       {loading && <Loading />}
-      <Form onSubmit={handleSubmit} initialData={meetup}>
+      <Form onSubmit={handleSubmit} schema={schema} initialData={meetup}>
         <ImageInput name="banner_id" />
         <Input name="title" type="text" placeholder="Title" />
-        <Input name="description" multiline placeholder="Description" />
+        <Input name="description" placeholder="Description" />
         <Datapicker name="date" placeholder="Date/time of Meetup" />
         <Input name="localization" type="text" placeholder="Where?" />
         <button type="submit">

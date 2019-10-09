@@ -33,7 +33,7 @@ export default function Details({ match, history }) {
       }
       setLoading(false);
     })();
-  }, [id, meetup]);
+  }, [id]);
 
   return (
     <Container>

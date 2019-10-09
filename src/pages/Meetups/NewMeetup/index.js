@@ -12,13 +12,15 @@ import api from '~/services/api';
 
 // validation
 const schema = Yup.object().shape({
-  banner_id: Yup.number().required('Image is required'),
-  title: Yup.string().required('Name is required'),
+  banner_id: Yup.number().required('Please, inform the banner image'),
+  title: Yup.string().required('Please, inform a title'),
   description: Yup.string()
-    .min(10, 'You must type 10 chars at least')
-    .required('Description is required'),
-  date: Yup.date('Data invalida').required('Provide date and time'),
-  localization: Yup.string().required('Provide the place'),
+    .max(140, 'Description can not be more than 140 characters')
+    .required('Please, inform a description'),
+  localization: Yup.string().required('Please, inform a location'),
+  date: Yup.date()
+    .required('Please, inform a date')
+    .min(new Date(), 'Unable to create the meetup on past dates'),
 });
 
 export default function NewMeetup({ history }) {
