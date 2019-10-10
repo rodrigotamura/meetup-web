@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Textarea } from '@rocketseat/unform';
-import { MdSave, MdImage } from 'react-icons/md';
+import { Form, Input } from '@rocketseat/unform';
+import { MdSave } from 'react-icons/md';
 import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
@@ -81,7 +81,13 @@ export default function EditMeetup({ match, history }) {
         <Datapicker name="date" placeholder="Date/time of Meetup" />
         <Input name="localization" type="text" placeholder="Where?" />
         <button type="submit">
-          <MdSave size={16} color="#FFF" /> Save meetup
+          {sendLoading ? (
+            'Saving...'
+          ) : (
+            <>
+              <MdSave size={16} color="#FFF" /> Save meetup
+            </>
+          )}
         </button>
       </Form>
     </Container>

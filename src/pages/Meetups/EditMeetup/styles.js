@@ -8,12 +8,6 @@ export const Container = styled.div`
     width: 100%;
     margin: 20px 0;
 
-    input + span,
-    textarea + span {
-      color: red;
-      margin: -10px 0 10px 10px;
-    }
-
     .react-datepicker-wrapper + span {
       color: red;
       margin-top: -10px;

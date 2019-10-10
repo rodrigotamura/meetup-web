@@ -28,7 +28,7 @@ export default function Details({ match, history }) {
         setMeetup(data);
       } catch (err) {
         toast.error(
-          `Something is wrong in loading meetup. Server response: ${err}`
+          `Something is wrong in loading meetup. Server response: ${err.response.data.error}`
         );
       }
       setLoading(false);

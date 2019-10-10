@@ -51,7 +51,14 @@ export default createGlobalStyle`
     justify-content: space-evenly;
   }
 
-
+  form {
+    /* For Yup errors */
+    input + span,
+    textarea + span {
+      color: red;
+      margin: -10px 0 10px 10px;
+    }
+  }
 
   a {
     text-decoration: none;
